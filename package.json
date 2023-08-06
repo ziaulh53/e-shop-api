@@ -1,0 +1,36 @@
+{
+  "name": "e-shop-api",
+  "version": "1.0.0",
+  "description": "eshop api",
+  "main": "app.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development nodemon bin/dev",
+    "start": "cross-env NODE_ENV=production node build/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node bin/build"
+  },
+  "author": "ziaulh53",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "helmet": "^7.0.0",
+    "jsonwebtoken": "^9.0.1",
+    "moment": "^2.29.4",
+    "mongoose": "^7.4.2",
+    "shelljs": "^0.8.5"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.22.9",
+    "@babel/core": "^7.22.9",
+    "@babel/node": "^7.22.6",
+    "@babel/plugin-transform-runtime": "^7.22.9",
+    "@babel/preset-env": "^7.22.9",
+    "@babel/register": "^7.22.5",
+    "babel-preset-es2017": "^6.24.1",
+    "nodemon": "^3.0.1"
+  }
+}
