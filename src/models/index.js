@@ -1,1 +1,5 @@
-export  {default as UserModel } from './Users'
+export { default as AdminModel } from './Admin'
+export { default as UserModel } from './Users'
+export { default as BrandModel } from './Brands'
+export { default as CategoryModel } from './Category'
+export { default as ProductModel } from './Product'

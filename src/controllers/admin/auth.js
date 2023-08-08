@@ -1,36 +1,49 @@
 import jwt from "jsonwebtoken";
-import { UserModel } from "../models";
 import bcrypt from "bcryptjs";
-import { ResetPasswordTemplate, WelcomeTemplate, sendEmail } from "../helpers";
+import { AdminModel } from "../../models";
+import { AdminResetPasswordTemplate, sendEmail } from "../../helpers";
+import { adminRole } from "../../constant/adminRole";
 
 const secretKey = "123456Zh";
 
-export const register = async (req, res) => {
+export const getAllAdmins = async (req, res) => {
   try {
-    const { firstName, lastName, email, phone, password } = req.body;
+    const {role } = req.body.admin;
+    if (role !== adminRole.super) {
+      return res.status(404).json({ msg: "Not allowed" });
+    }
+    const admins = await AdminModel.find({ role:{$ne: adminRole.super}})
+    return res
+      .status(200)
+      .json({ success: false, result: admins });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const adminCreate = async (req, res) => {
+  try {
+    const { fullName, email, password, role, avater } = req.body;
     if (!email) {
       return res.status(404).json({ msg: "User input not valid" });
     }
-    const existUser = await UserModel.findOne({ email });
-    if (existUser?._id) {
+    const existAdmin = await AdminModel.findOne({ email });
+    if (existAdmin?._id) {
       return res
         .status(200)
         .json({ success: false, msg: "Email already exist!" });
     }
     const hashPassword = await bcrypt.hash(password, 12);
-    const user = {
-      firstName,
-      lastName,
+    const admin = {
+      fullName,
       password: hashPassword,
       email,
-      phone,
+      role,
+      avater
     };
-    const response = await UserModel.create({ ...user });
+    const response = await AdminModel.create({ ...admin });
 
     if (response?._id) {
-      const emailTemplate = WelcomeTemplate();
-      const subject = "Registration confirmation";
-      await sendEmail(email, subject, emailTemplate);
       return res
         .status(200)
         .json({ success: true, msg: "Registration is completed" });
@@ -43,24 +56,23 @@ export const register = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {
+export const adminLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await UserModel.findOne({ email });
-    if (!user) {
+    const admin = await AdminModel.findOne({ email });
+    if (!admin) {
       return res
         .status(201)
         .json({ success: false, msg: "Email doesn't exist" });
     }
-    const passwordMatch = await bcrypt.compare(password, user.password);
+    const passwordMatch = await bcrypt.compare(password, admin.password);
     if (passwordMatch) {
-        const {firstName, lastName, _id, phone, email, avater=''} =user;
+        const {fullName, _id, email, avater='', role} =admin;
         const response = {
-            firstName,
-            lastName,
+           fullName,
             email,
             _id,
-            phone,
+            role,
             avater
         }
       const token = jwt.sign({ ...response }, secretKey);
@@ -72,19 +84,19 @@ export const login = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-  }
+  } 
 };
 
-export const forgetPassword = async (req, res) => {
+export const adminForgetPassword = async (req, res) => {
   try {
     const email = req.body.email;
-    const user = await UserModel.findOne({ email });
-    if (!user) {
-      return res.status(200).json({ success: false, msg: "User not found" });
+    const admin = await AdminModel.findOne({ email });
+    if (!admin) {
+      return res.status(200).json({ success: false, msg: "Admin not found" });
     }
-    delete user.password;
-    const token = jwt.sign({ ...user }, secretKey);
-    const emailTemplate = ResetPasswordTemplate(token);
+    delete admin.password;
+    const token = jwt.sign({ ...admin }, secretKey);
+    const emailTemplate = AdminResetPasswordTemplate(token);
     const subject = "Reset your password";
     await sendEmail(email, subject, emailTemplate);
     return res
@@ -92,19 +104,19 @@ export const forgetPassword = async (req, res) => {
       .json({ success: true, msg: "Reset url sent to email" });
   } catch (error) {
     console.log(error);
-  }
+  } 
 };
 
-export const resetPassword = async (req, res) => {
+export const adminResetPassword = async (req, res) => {
   try {
     const { newPassword, token } = req.body;
     const { email } = jwt.verify(token, secretKey)._doc;
     const hashPassword = await bcrypt.hash(newPassword, 12);
-    const user = await UserModel.findOne({ email });
-    if (!user) {
-      return res.status(200).json({ success: false, msg: "User not found" });
+    const admin = await AdminModel.findOne({ email });
+    if (!admin) {
+      return res.status(200).json({ success: false, msg: "Admin not found" });
     }
-    await UserModel.findOneAndUpdate({ email }, { password: hashPassword });
+    await AdminModel.findOneAndUpdate({ email }, { password: hashPassword });
     return res.status(200).json({ success: true, msg: "Password updated" });
   } catch (error) {
     console.log(error);

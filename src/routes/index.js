@@ -1,1 +1,2 @@
-export {default as authRoute} from './auth'
+export * from './users'
+export * from './admin'

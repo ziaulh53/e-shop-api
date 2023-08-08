@@ -3,8 +3,8 @@ import cors from 'cors';
 import dotenv from 'dotenv'
 import helmet from "helmet";
 import connectDB from "./config/db";
-import bodyParser from 'body-parser'
-import { authRoute } from "./routes";
+import bodyParser from 'body-parser';
+import { adminAuthRoute, brandRoute, authRoute, categoryRoute} from './routes'
 
 dotenv.config({ path: "./.env" });
 connectDB();
@@ -16,7 +16,14 @@ app.use(helmet());
 app.use(bodyParser.json({limit: "30mb", extended: true}))
 app.use(bodyParser.urlencoded({limit: "30mb", extended: true}))
 
+// users
 app.use('/auth', authRoute);
+
+
+// admin
+app.use('/admin', adminAuthRoute)
+app.use('/admin/brand', brandRoute)
+app.use('/admin/category', categoryRoute)
 
 const PORT = process.env.PORT || 5000;
 
