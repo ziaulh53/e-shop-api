@@ -9,7 +9,7 @@ export const authorization = async (req, res, next) => {
     const token = await req.headers.authorization.split(" ")[1];
     const {_id} = jwt.verify(token, secretKey);
     const admin = await AdminModel.findById(_id);
-    if (!admin._id) {
+    if (!admin) {
       throw new CustomError("Unauthorized", 401);
     }
     req.body = {
