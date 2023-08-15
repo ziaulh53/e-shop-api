@@ -49,7 +49,7 @@ export const createCategoryAdmin = async (req, res) => {
 
 export const editCategoryAdmin = async (req, res) => {
   const id = req.params.id;
-  const { name, logo } = req.body;
+  const { name, coverImage, brands } = req.body;
   try {
     const foundBrand = await CategoryModel.findById(id);
     if (!foundBrand) {
@@ -58,7 +58,8 @@ export const editCategoryAdmin = async (req, res) => {
         .json({ success: false, msg: "Not found the brand" });
     }
     if (name) foundBrand.name = name;
-    if (logo) foundBrand.logo = logo;
+    if (coverImage) foundBrand.coverImage = coverImage;
+    if(brands) foundBrand.brands = brands
     await foundBrand.save();
     return res.status(200).json({ success: true, msg: "Update successfully" });
   } catch (error) {
