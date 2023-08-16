@@ -17,10 +17,10 @@ const app = express();
 
 
 app.use(cors());
-const upload = multer({dest: "/uploads"})
+const upload = multer({dest: "/uploads"});
 app.use(helmet());
-app.use(bodyParser.json({limit: "30mb", extended: true}))
-app.use(bodyParser.urlencoded({limit: "30mb", extended: true}))
+app.use(bodyParser.json({limit: "30mb", extended: true}));
+app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));
 
 // users
 app.use('/auth', authRoute);
@@ -30,6 +30,7 @@ app.use('/auth', authRoute);
 app.use('/admin', adminAuthRoute)
 app.use('/admin/brand', brandRoute)
 app.use('/admin/category', categoryRoute)
+app.use('/admin/user', userRoute);
 app.use('/admin/user', userRoute);
 
 // file uploader
