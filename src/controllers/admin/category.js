@@ -13,7 +13,7 @@ export const getCategoryAdmin = async (req, res) => {
 export const getSingleCategoryAdmin = async (req, res) => {
     const id = req.params.id;
     try {
-      const product = await ProductModel.find({category:id});
+      const products = await ProductModel.find({category:id}).populate('brands').exec();
       const category = await CategoryModel.findById(id).populate('brands').exec();
       if (!category) {
         return res
@@ -22,7 +22,7 @@ export const getSingleCategoryAdmin = async (req, res) => {
       }
       const result = {
         ...category._doc,
-        product
+        products
       }
       return res.status(200).json({ success: true, result });
     } catch (error) {
