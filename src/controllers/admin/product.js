@@ -24,6 +24,21 @@ export const createProduct = async (req, res) => {
   }
 };
 
+export const editProduct = async (req, res) => {
+  const { productData } = req.body;
+  const id = req.params.id;
+  try {
+    const result = await ProductModel.findByIdAndUpdate(id,{...productData});
+    if (result._id) {
+      return res
+        .status(200)
+        .json({ success: true, msg: "Product created successfully" });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const deleteProductAdmin = async (req, res) => {
   const id = req.params.id;
   try {
