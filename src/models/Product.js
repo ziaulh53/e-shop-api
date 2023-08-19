@@ -20,8 +20,7 @@ const ProductSchema = new Schema(
     quantity: { type: Number, default: 0 },
     colors: [
       {
-        colorName: { type: String },
-        colorCode: { type: String },
+        color: { type: Schema.Types.ObjectId, ref: "colors" },
         quantity: { type: Number, default: 0 },
         images: { type: Array },
       },
