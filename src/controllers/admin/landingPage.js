@@ -16,13 +16,16 @@ export const updateBanners = async (req, res) => {
   const banners = req.body.banners;
   try {
     const result = await LandingPageModel.find();
-if(!result.length){
-   await LandingPageModel.create({banners});
-   return res.status(200).json({ success: true, msg: 'Updated successfully' });
-}
-    // landingPage.banners = banners;
-    // landingPage.save();
-    return res.status(200).json({ success: true, msg: 'Updated successfully' });
+    if (!result.length) {
+      await LandingPageModel.create({ banners });
+      return res
+        .status(200)
+        .json({ success: true, msg: "Updated successfully" });
+    }
+    await LandingPageModel.findByIdAndUpdate(result[0]._id, {
+      $set: { banners },
+    });
+    return res.status(200).json({ success: true, msg: "Updated successfully" });
   } catch (error) {
     console.log(error.message);
     return res
@@ -34,10 +37,17 @@ if(!result.length){
 export const updateTrendings = async (req, res) => {
   const trendings = req.body.trendings;
   try {
-    const landingPage = await LandingPageModel.find({});
-    landingPage.trendings = trendings;
-    landingPage.save();
-    return res.status(200).json({ success: true, result });
+    const result = await LandingPageModel.find({});
+    if (!result.length) {
+      await LandingPageModel.create({ trendings });
+      return res
+        .status(200)
+        .json({ success: true, msg: "Updated successfully" });
+    }
+    await LandingPageModel.findByIdAndUpdate(result[0]._id, {
+      $set: { trendings },
+    });
+    return res.status(200).json({ success: true, msg:"Updated successfully" });
   } catch (error) {
     console.log(error.message);
     return res
