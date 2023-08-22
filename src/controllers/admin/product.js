@@ -1,9 +1,9 @@
 import { ProductModel } from "../../models";
 
-export const getProduct = async (req, res) => {
-  const category = req.body.categoryId;
+export const getProductsAdmin = async (req, res) => {
+  // const category = req.body.categoryId;
   try {
-    const result = await ProductModel.find({ category });
+    const result = await ProductModel.find().populate('category').exec();
     return res.status(201).json({ success: true, result });
   } catch (error) {
     console.log(error);
