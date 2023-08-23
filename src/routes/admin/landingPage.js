@@ -1,11 +1,11 @@
 import express from 'express';
 import { authorization } from '../../middleware';
-import { getLandingPage, updateBanners, updateTrendings } from '../../controllers';
+import { getLandingPageAdmin, updateBanners, updateTrendings } from '../../controllers';
 
 
 const router = express.Router();
 
-router.get("/", authorization, getLandingPage)
+router.get("/", authorization, getLandingPageAdmin)
 router.post("/banner", authorization, updateBanners)
 router.post("/trending", authorization, updateTrendings)
 
