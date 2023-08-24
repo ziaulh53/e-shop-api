@@ -5,13 +5,13 @@ import {
   editBrandAdmin,
   getBrandsAdmin,
 } from "../../controllers";
-import { authorization } from "../../middleware";
+import { authorizationAdmin} from "../../middleware";
 
 const router = express.Router();
 
-router.post("/create", authorization, createBrandAdmin);
-router.put("/edit/:id", authorization, editBrandAdmin);
-router.delete("/delete/:id", authorization, deleteBrandAdmin);
-router.get("/", authorization, getBrandsAdmin);
+router.post("/create", authorizationAdmin, createBrandAdmin);
+router.put("/edit/:id", authorizationAdmin, editBrandAdmin);
+router.delete("/delete/:id", authorizationAdmin, deleteBrandAdmin);
+router.get("/", authorizationAdmin, getBrandsAdmin);
 
 export default router;

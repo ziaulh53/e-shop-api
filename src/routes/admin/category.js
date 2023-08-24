@@ -1,15 +1,15 @@
 import express from 'express';
 import { createCategoryAdmin, deleteCategoryAdmin, editCategoryAdmin, getCategoryAdmin, getSingleCategoryAdmin } from '../../controllers';
-import { authorization } from '../../middleware';
+import { authorizationAdmin} from '../../middleware';
 
 
 const router = express.Router();
 
-router.get("/", authorization, getCategoryAdmin)
-router.get("/:id", authorization, getSingleCategoryAdmin)
-router.post("/create", authorization, createCategoryAdmin)
-router.put("/edit/:id", authorization, editCategoryAdmin)
-router.delete("/delete/:id", authorization, deleteCategoryAdmin)
+router.get("/", authorizationAdmin, getCategoryAdmin)
+router.get("/:id", authorizationAdmin, getSingleCategoryAdmin)
+router.post("/create", authorizationAdmin, createCategoryAdmin)
+router.put("/edit/:id", authorizationAdmin, editCategoryAdmin)
+router.delete("/delete/:id", authorizationAdmin, deleteCategoryAdmin)
 
 
 export default router;

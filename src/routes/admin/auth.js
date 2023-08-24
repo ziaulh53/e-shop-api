@@ -1,16 +1,16 @@
 import express from 'express';
 import { adminCreate, adminForgetPassword, adminLogin, adminResetPassword, getAllAdmins } from '../../controllers';
-import { authorization } from '../../middleware';
+import { authorizationAdmin} from '../../middleware';
 
 
 const router = express.Router();
 
 
-router.post("/create-admin", authorization ,adminCreate)
+router.post("/create-admin", authorizationAdmin,adminCreate)
 router.post("/login", adminLogin)
 router.post("/forget-password", adminForgetPassword)
 router.post("/reset-password", adminResetPassword)
-router.get("/",authorization, getAllAdmins)
+router.get("/",authorizationAdmin, getAllAdmins)
 
 
 export default router;

@@ -1,5 +1,5 @@
 import express from 'express';
-import { authorization } from '../../middleware';
+import { authorizationAdmin} from '../../middleware';
 import { getLandingPage } from '../../controllers';
 
 

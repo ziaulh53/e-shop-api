@@ -1,20 +1,20 @@
 import jwt from "jsonwebtoken";
 import { CustomError } from "../helpers";
-import { AdminModel } from "../models";
+import { UserModel } from "../models";
 
 const secretKey = "123456Zh";
 
-export const authorizationAdmin = async (req, res, next) => {
+export const authorization = async (req, res, next) => {
   try {
     const token = await req.headers.authorization.split(" ")[1];
     const {_id} = jwt.verify(token, secretKey);
-    const admin = await AdminModel.findById(_id);
-    if (!admin) {
+    const user = await UserModel.findById(_id);
+    if (!user) {
       throw new CustomError("Unauthorized", 401);
     }
     req.body = {
       ...req.body,
-      admin,
+      user,
     };
     next();
   } catch (error) {

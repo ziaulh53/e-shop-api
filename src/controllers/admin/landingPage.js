@@ -1,6 +1,6 @@
 import { LandingPageModel } from "../../models";
 
-export const getLandingPage = async (req, res) => {
+export const getLandingPageAdmin = async (req, res) => {
   try {
     const result = await LandingPageModel.find().populate('trendings').exec();
     return res.status(200).json({ success: true, result: result[0] || {} });
