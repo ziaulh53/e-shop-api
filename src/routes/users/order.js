@@ -5,7 +5,7 @@ import { authorization } from '../../middleware';
 
 const router = express.Router();
 
-router.get("/create", authorization, createOrder)
+router.post("/create", authorization, createOrder)
 
 
 export default router;
