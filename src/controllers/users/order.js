@@ -1,5 +1,6 @@
 import { v4 } from "uuid";
 import { OrderModel, ProductModel } from "../../models";
+import uniqid from 'uniqid';
 
 const SSK =
   "sk_test_51NiaBnG5LWC441mfG5iQbJADmdDYM3XncuwwhYoHmk1B4vuLCqN5Qgi5qTlp6o9ia5UEA8nnxNsw6eWWOBp00TKB00CLr736Ij";
@@ -13,7 +14,7 @@ export const createOrder = async (req, res) => {
   try {
     const { isStockout, totalPrice } = await inVentoryCheckedAndUpdate(items);
     if(isStockout){
-        return res.status(200).json({success: false, msg: "Stock out"});
+        return res.status(200).json({success: false, msg: "Stock out", isStockout});
     }
     const charge = await stripePayment({user, token, totalPrice})
     if (!charge?.status === "succeeded") {
@@ -30,6 +31,7 @@ export const createOrder = async (req, res) => {
         chargeId: charge?.id,
       },
       items,
+      orderId: `ESHOP-${uniqid.time()}`.toUpperCase()
     };
     await OrderModel.create({ ...orderData });
     return res

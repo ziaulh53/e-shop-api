@@ -6,6 +6,7 @@ const OrderSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "users",
     },
+    orderId: String,
     items: [],
     totalPrice: Number,
     shippingAddress: {
@@ -20,6 +21,11 @@ const OrderSchema = new mongoose.Schema(
       type: Object,
       required: true,
     },
+    status: {
+      type: String,
+      enum: ['Pending', 'Accepted', 'Shipped', 'Delivered'],
+      default: 'Pending'
+    }
   },
   { timestamps: true }
 );
