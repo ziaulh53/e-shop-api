@@ -100,3 +100,14 @@ const updateQuantity = (productIds, updateQuantities) => {
     );
   });
 };
+
+//get orders
+export const getOrders = async (req,res)=>{
+  const { user } = req.body;
+  try {
+    const result = await OrderModel.find({user: user?._id});
+    return res.status(200).json({success: true, result})
+  } catch (error) {
+    console.log(error)
+  }
+}
