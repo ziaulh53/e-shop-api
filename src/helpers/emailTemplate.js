@@ -66,3 +66,27 @@ export const WelcomeTemplate = () => {
     </body>
     </html>`;
 };
+
+export const PasswordChangeRequest = (token) => {
+  return `<!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Document</title>
+    </head>
+    <body>
+      <div style="padding: 0 40px">
+        <h2 style="text-align: center; font-size: 30px">Change Email</h2>
+        <div style="width: 300px; margin: auto">
+          <div style="font-size: 18px; font-weight: 500; margin-bottom: 10px">
+           Verify your email
+          </div>
+          <a style="padding: 5px 10px; color: white; background: red"
+            href="${process.env.ADMIN_WEB_URL}/change-email-verification?security_key=${token}" target="_blank">Verify</a
+          >
+        </div>
+      </div>
+    </body>
+  </html>`;
+};

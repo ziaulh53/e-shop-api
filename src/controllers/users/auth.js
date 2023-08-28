@@ -1,7 +1,12 @@
 import jwt from "jsonwebtoken";
-import { UserModel } from '../../models'
+import { UserModel } from "../../models";
 import bcrypt from "bcryptjs";
-import { ResetPasswordTemplate, WelcomeTemplate, sendEmail } from "../../helpers";
+import {
+  PasswordChangeRequest,
+  ResetPasswordTemplate,
+  WelcomeTemplate,
+  sendEmail,
+} from "../../helpers";
 
 const secretKey = "123456Zh";
 
@@ -54,15 +59,15 @@ export const login = async (req, res) => {
     }
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (passwordMatch) {
-        const {firstName, lastName, _id, phone, email, avater=''} =user;
-        const response = {
-            firstName,
-            lastName,
-            email,
-            _id,
-            phone,
-            avater
-        }
+      const { firstName, lastName, _id, phone, email, avatar = "" } = user;
+      const response = {
+        firstName,
+        lastName,
+        email,
+        _id,
+        phone,
+        avatar,
+      };
       const token = jwt.sign({ ...response }, secretKey);
       return res
         .status(200)
@@ -105,6 +110,91 @@ export const resetPassword = async (req, res) => {
       return res.status(200).json({ success: false, msg: "User not found" });
     }
     await UserModel.findOneAndUpdate({ email }, { password: hashPassword });
+    return res.status(200).json({ success: true, msg: "Password updated" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const updateProfile = async (req, res) => {
+  const { user, profileData } = req.body;
+  try {
+    const foundUser = await UserModel.findById(user?._id);
+    if (!foundUser) {
+      return res.status(200).json({ success: false, msg: "User not found" });
+    }
+    await UserModel.findByIdAndUpdate(user?._id, { ...profileData });
+    return res.status(200).json({ success: true, msg: "Profile updated" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const changeEmailRequest = async (req, res) => {
+  const { user, newEmail, password } = req.body;
+  try {
+    const foundUser = await UserModel.findById(user?._id);
+    if (!foundUser) {
+      return res.status(200).json({ success: false, msg: "User not found!" });
+    }
+    const passwordMatch = await bcrypt.compare(password, foundUser.password);
+    if (!passwordMatch) {
+      return res
+        .status(200)
+        .json({ success: false, msg: "Password mismatch!" });
+    }
+    const response = {
+      email: newEmail,
+      _id: foundUser._id,
+    };
+    const token = jwt.sign({ ...response }, secretKey);
+    const emailTemplate = PasswordChangeRequest(token);
+    const subject = "Change Email";
+    await sendEmail(newEmail, subject, emailTemplate);
+    return res
+      .status(200)
+      .json({ success: true, msg: "We have sent a link in your new email" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const changeEmail = async (req, res) => {
+  const { security_key } = req.body;
+  const { _id, email } = jwt.verify(security_key, secretKey);
+  try {
+    const foundUser = await UserModel.findById(_id);
+    if (!foundUser) {
+      return res.status(200).json({ success: false, msg: "User not found!" });
+    }
+    foundUser.email = email;
+    await foundUser.save();
+    return res
+      .status(200)
+      .json({ success: true, msg: "Email updated successfully" });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const changePassword = async (req, res) => {
+  const { user, currentPassword, newPassword } = req.body;
+  try {
+    const foundUser = await UserModel.findById(user?._id);
+    if (!foundUser) {
+      return res.status(200).json({ success: false, msg: "User not found!" });
+    }
+    const passwordMatch = await bcrypt.compare(
+      currentPassword,
+      foundUser.password
+    );
+    if (!passwordMatch) {
+      return res
+        .status(200)
+        .json({ success: false, msg: "Password mismatch!" });
+    }
+    const hashPassword = await bcrypt.hash(newPassword, 12);
+    await UserModel.findByIdAndUpdate(user?._id, { password: hashPassword });
     return res.status(200).json({ success: true, msg: "Password updated" });
   } catch (error) {
     console.log(error);

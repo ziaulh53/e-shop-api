@@ -3,7 +3,7 @@ import { CategoryModel, ProductModel } from "../../models";
 
 export const getCategoryAdmin = async (req, res) => {
   try {
-    const category = await CategoryModel.find({}).populate("brands").exec();
+    const category = await CategoryModel.find({}).populate("brands");
     return res.status(200).json({ success: true, result: category });
   } catch (error) {
     console.log(error);
@@ -13,8 +13,8 @@ export const getCategoryAdmin = async (req, res) => {
 export const getSingleCategoryAdmin = async (req, res) => {
     const id = req.params.id;
     try {
-      const products = await ProductModel.find({category:id}).populate('brands').exec();
-      const category = await CategoryModel.findById(id).populate('brands').exec();
+      const products = await ProductModel.find({category:id}).populate('brands');
+      const category = await CategoryModel.findById(id).populate('brands');
       if (!category) {
         return res
           .status(201)
