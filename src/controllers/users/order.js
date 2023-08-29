@@ -111,3 +111,23 @@ export const getOrders = async (req,res)=>{
     console.log(error)
   }
 }
+export const getSingleOrder = async (req,res)=>{
+  const id = req.params.id;
+  try {
+    const result = await OrderModel.findById(id);
+    return res.status(200).json({success: true, result})
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const updateStatus = async (req,res)=>{
+  const id = req.params.id;
+  const {status} = req.body;
+  try {
+    await OrderModel.findByIdAndUpdate(id, {status});
+    return res.status(200).json({success: true, msg: status==='Cancelled'?"Order Cancelled":"Order status updated"})
+  } catch (error) {
+    console.log(error)
+  }
+}

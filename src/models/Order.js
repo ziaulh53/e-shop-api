@@ -25,7 +25,15 @@ const OrderSchema = new mongoose.Schema(
       type: String,
       enum: ['Pending', 'Accepted', 'Shipped', 'Cancelled', 'Delivered'],
       default: 'Pending'
-    }
+    },
+    logistics: {
+      trackingUrl: String,
+      name: String
+    },
+    refunded: {
+      type: Boolean,
+      default: false
+    } 
   },
   { timestamps: true }
 );
