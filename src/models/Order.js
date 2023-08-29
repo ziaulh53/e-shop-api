@@ -33,7 +33,8 @@ const OrderSchema = new mongoose.Schema(
     refunded: {
       type: Boolean,
       default: false
-    } 
+    },
+    cancelNote: String
   },
   { timestamps: true }
 );
