@@ -10,33 +10,37 @@ const stripe = require("stripe")(SSK);
 
 //get orders
 export const getOrdersAdmin = async (req, res) => {
-  const { startDate, endDate, orderId, status, email, phone } = req.query;
+  const { startDate, endDate, orderId, status, email, phone, page } = req.query;
   let filter = {};
   if (startDate) {
     filter = {
-      "cratedAt": { $gte: new Date(startDate), $lte: new Date(endDate) },
+      createdAt: { $gte: new Date(startDate), $lte: new Date(endDate) },
     };
   }
-  if (orderId){
+  if (orderId) {
     filter = {
-      ...filter, "orderId": orderId
-    }
-  };
-  if (status){
+      ...filter,
+      orderId: orderId,
+    };
+  }
+  if (status) {
     filter = {
-      ...filter, "status": status
-    }
-  };
-  if (email){
+      ...filter,
+      status: status,
+    };
+  }
+  if (email) {
     filter = {
-      ...filter, "user.email": email
-    }
-  };
-  if (phone){
+      ...filter,
+      "user.email": email,
+    };
+  }
+  if (phone) {
     filter = {
-      ...filter, "shippingAddress.phone": phone
-    }
-  };
+      ...filter,
+      "shippingAddress.phone": phone,
+    };
+  }
   try {
     const pripeline = [
       {
@@ -52,13 +56,16 @@ export const getOrdersAdmin = async (req, res) => {
       },
       {
         $match: {
-          ...filter
+          ...filter,
         },
       },
+      { $setWindowFields: { output: { totalCount: { $count: {} } } } },
+      { $skip: (page - 1 || 0) * 1 },
+      { $limit: 15 },
     ];
 
     const result = await OrderModel.aggregate(pripeline);
-    return res.status(200).json({ success: true, result });
+    return res.status(200).json({ success: true, result: {orders: result, count: result[0]?.totalCount || 0 } });
   } catch (error) {
     console.log(error);
   }
