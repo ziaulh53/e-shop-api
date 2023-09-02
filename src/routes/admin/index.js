@@ -6,3 +6,4 @@ export { default as productRouteAdmin } from "./product";
 export { default as colorRouteAdmin } from "./color";
 export { default as landingRouteAdmin } from "./landingPage";
 export { default as orderRouteAdmin } from "./order";
+export { default as dashboardRouteAdmin } from "./dashboard";

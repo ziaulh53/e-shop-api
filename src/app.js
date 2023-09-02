@@ -4,7 +4,7 @@ import dotenv from 'dotenv'
 import helmet from "helmet";
 import connectDB from "./config/db";
 import bodyParser from 'body-parser';
-import { authRoute, categoryRoute, productRoute, landingRoute, authRouteAdmin, brandRouteAdmin, categoryRouteAdmin, userRouteAdmin, productRouteAdmin, colorRouteAdmin, landingRouteAdmin, orderRoute, addressRoute, orderRouteAdmin} from './routes'
+import { authRoute, categoryRoute, productRoute, landingRoute, authRouteAdmin, brandRouteAdmin, categoryRouteAdmin, userRouteAdmin, productRouteAdmin, colorRouteAdmin, landingRouteAdmin, orderRoute, addressRoute, orderRouteAdmin, dashboardRouteAdmin} from './routes'
 import { singleFileUpload } from "./helpers";
 import multer from "multer";
 
@@ -39,6 +39,7 @@ app.use('/admin/product', productRouteAdmin);
 app.use('/admin/color', colorRouteAdmin);
 app.use('/admin/landing', landingRouteAdmin)
 app.use('/admin/order', orderRouteAdmin)
+app.use('/admin/dashboard', dashboardRouteAdmin)
 
 // file uploader
 app.post('/file-upload', upload.single("file"), singleFileUpload);
