@@ -1,25 +1,12 @@
 import moment from "moment/moment";
 import { OrderModel } from "../../models";
+import { formatQuary } from "../../helpers";
 
-export const getDahsboardData = async (req, res) => {
+export const getDahsboardSellingData = async (req, res) => {
+  const { type } = req.query;
   try {
     // seven days
-    const fromDate = moment().subtract(7, "d").startOf("day").toDate();
-    let sevenDays = {
-      labels: [],
-      data: [],
-    };
-    Array(7)
-      .fill(null)
-      .forEach((_, i) => {
-        sevenDays.labels.push(
-          moment()
-            .subtract(i + 1, "d")
-            .format("ddd")
-        );
-        sevenDays.data.push(0);
-      });
-
+    const { chartData, fromDate, dateFormate } = formatQuary(type);
     const result = await OrderModel.aggregate([
       {
         $match: {
@@ -32,16 +19,10 @@ export const getDahsboardData = async (req, res) => {
       {
         $group: {
           _id: {
-            // year: { $year: "$dateField" },
-            // month: { $month: "$dateField" },
-            // day: {
-            //   $dayOfMonth: "$createdAt",
-            // },
-            day: {
-              $dateToString: {
-                format: '%Y-%m-%d',
-                date: "$createdAt",
-              },
+            $dateTrunc: {
+              // format: "%Y-%m-%d",
+              date: "$createdAt",
+              unit: type
             },
           },
           count: { $sum: 1 },
@@ -49,11 +30,11 @@ export const getDahsboardData = async (req, res) => {
       },
     ]);
     result.forEach(({ _id, count }) => {
-      const dayOfweek = moment(_id.day).format('ddd')
-      const findIdx = sevenDays.labels.findIndex((item) => item === dayOfweek);
-      sevenDays.data[findIdx] = count;
+      const findDate = moment(_id).format(dateFormate);
+      const findIdx = chartData.labels.findIndex((item) => item === findDate);
+      chartData.data[findIdx] = count;
     });
-    return res.status(200).json({ success: true, result: sevenDays });
+    return res.status(200).json({ success: true, result: chartData });
   } catch (error) {
     console.log(error);
     return res
@@ -61,3 +42,14 @@ export const getDahsboardData = async (req, res) => {
       .json({ success: false, msg: "Something went worng!" });
   }
 };
+
+export const getCategorySellingData = (req, res)=>{
+  try {
+    
+  } catch (error) {
+    return res
+    .status(402)
+    .json({ success: false, msg: "Something went worng!" });
+    console.log(error)
+  }
+}
