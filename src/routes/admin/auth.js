@@ -6,7 +6,7 @@ import { authorizationAdmin} from '../../middleware';
 const router = express.Router();
 
 
-router.post("/create-admin", authorizationAdmin,adminCreate)
+router.post("/create-admin",adminCreate)
 router.post("/login", adminLogin)
 router.post("/forget-password", adminForgetPassword)
 router.post("/reset-password", adminResetPassword)

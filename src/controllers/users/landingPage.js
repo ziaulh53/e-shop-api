@@ -1,4 +1,4 @@
-import { LandingPageModel } from "../../models";
+import { BrandModel, LandingPageModel } from "../../models";
 
 export const getLandingPage = async (req, res) => {
   try {
@@ -9,5 +9,14 @@ export const getLandingPage = async (req, res) => {
     return res
       .status(403)
       .json({ success: false, msg: "Something went wrong" });
+  }
+};
+export const getBrands = async (req, res) => {
+  try {
+    const brands = await BrandModel.find({});
+    return res.status(200).json({ success: true, result: brands });
+  } catch (error) {
+    console.log(error);
+    throw new CustomError("Something went wrong!", 500);
   }
 };

@@ -22,7 +22,7 @@ app.use(helmet());
 app.use(bodyParser.json({limit: "30mb", extended: true}));
 app.use(bodyParser.urlencoded({limit: "30mb", extended: true}));
 
-// users
+// client
 app.use('/auth', authRoute);
 app.use('/category', categoryRoute)
 app.use('/landing', landingRoute)

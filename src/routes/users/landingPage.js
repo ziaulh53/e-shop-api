@@ -1,11 +1,9 @@
-import express from 'express';
-import { authorizationAdmin} from '../../middleware';
-import { getLandingPage } from '../../controllers';
-
+import express from "express";
+import { getLandingPage, getBrands } from "../../controllers";
 
 const router = express.Router();
 
-router.get("/", getLandingPage)
-
+router.get("/", getLandingPage);
+router.get("/brands", getBrands);
 
 export default router;
