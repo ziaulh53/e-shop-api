@@ -51,7 +51,7 @@ const stripePayment = async ({ user, token, totalPrice }) => {
     const idempotencyKey = v4();
     const charge = await stripe.charges.create(
       {
-        amount: Math.round(totalPrice) * 100,
+        amount: Math.round(totalPrice+80) * 100,
         currency: "usd",
         customer: customer.id,
       },
