@@ -17,6 +17,10 @@ const ProductSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    newArrival:{
+      type: Boolean,
+      default: false
+    },
     quantity: { type: Number, default: 0 },
     colors: [
       {

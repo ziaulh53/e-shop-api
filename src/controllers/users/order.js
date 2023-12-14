@@ -104,8 +104,15 @@ const updateQuantity = (productIds, updateQuantities) => {
 //get orders
 export const getOrders = async (req,res)=>{
   const { user } = req.body;
+  const {status} = req.query
+  let query = {
+    user: user?._id
+  }
+  if(status){
+    query.status = status
+  }
   try {
-    const result = await OrderModel.find({user: user?._id});
+    const result = await OrderModel.find(query);
     return res.status(200).json({success: true, result})
   } catch (error) {
     console.log(error)

@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { UserModel } from "../../models";
+import { UserModel, WishModel } from "../../models";
 import bcrypt from "bcryptjs";
 import {
   PasswordChangeRequest,
@@ -31,6 +31,7 @@ export const register = async (req, res) => {
       phone,
     };
     const response = await UserModel.create({ ...user });
+    await WishModel.create({ user: response?._id, products: [] });
 
     if (response?._id) {
       const emailTemplate = WelcomeTemplate();
