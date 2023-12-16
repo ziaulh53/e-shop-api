@@ -20,9 +20,18 @@ export const getSuggestionProduct = async (req, res) => {
     const result = await ProductModel.find({
       category: categoryId,
       _id: { $ne: productId },
-    })
-      .populate("category brands colors.color")
-      .exec();
+    }).populate("colors.color");
+    return res.status(201).json({ success: true, result });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getNewArrivalProduct = async (req, res) => {
+  try {
+    const result = await ProductModel.find({
+      newArrival: true,
+    });
     return res.status(201).json({ success: true, result });
   } catch (error) {
     console.log(error);

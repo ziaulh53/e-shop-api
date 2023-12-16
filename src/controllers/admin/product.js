@@ -32,7 +32,7 @@ export const editProduct = async (req, res) => {
     if (result._id) {
       return res
         .status(200)
-        .json({ success: true, msg: "Product created successfully" });
+        .json({ success: true, msg: "Product Updated successfully" });
     }
   } catch (error) {
     console.log(error);
