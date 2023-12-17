@@ -26,7 +26,7 @@ import { singleFileUpload } from "./helpers";
 import multer from "multer";
 
 dotenv.config({ path: "./.env" });
-// connectDB();
+connectDB();
 
 const app = express();
 
@@ -37,7 +37,7 @@ app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 
 // client
-app.use("/", authRoute);
+app.use("/auth", authRoute);
 app.use("/category", categoryRoute);
 app.use("/landing", landingRoute);
 app.use("/product", productRoute);
@@ -59,6 +59,6 @@ app.use("/admin/dashboard", dashboardRouteAdmin);
 // file uploader
 app.post("/file-upload", upload.single("file"), singleFileUpload);
 
-const PORT =  5000;
-// process.env.PORT ||
+const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, console.log("server running"));
