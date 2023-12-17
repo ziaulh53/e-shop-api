@@ -1,3 +1,4 @@
+import { Schema } from "mongoose";
 import { ProductModel } from "../../models";
 
 export const getSingleProduct = async (req, res) => {
@@ -31,6 +32,18 @@ export const getNewArrivalProduct = async (req, res) => {
   try {
     const result = await ProductModel.find({
       newArrival: true,
+    });
+    return res.status(201).json({ success: true, result });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getProductOnBrand = async (req, res) => {
+  const brandId = req.params.id;
+  try {
+    const result = await ProductModel.find({
+      brands: brandId,
     });
     return res.status(201).json({ success: true, result });
   } catch (error) {

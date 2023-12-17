@@ -7,7 +7,8 @@
     "dev": "cross-env NODE_ENV=development nodemon bin/dev",
     "start": "cross-env NODE_ENV=production node build/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node bin/build"
+    "build": "node bin/build",
+    "vercel-build": "echo hogamara"
   },
   "author": "ziaulh53",
   "license": "ISC",
